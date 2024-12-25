@@ -1,6 +1,5 @@
 "use client";
 import "./globals.css";
-
 import React, { useEffect, useRef, useState } from "react";
 
 export default function SnakeGame() {
@@ -14,8 +13,11 @@ export default function SnakeGame() {
   });
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
+    if (!gameStarted) return; // Don't run the game logic if the game hasn't started
+
     const interval = setInterval(draw, 150);
     document.addEventListener("keydown", changeDirection);
 
@@ -23,7 +25,7 @@ export default function SnakeGame() {
       clearInterval(interval);
       document.removeEventListener("keydown", changeDirection);
     };
-  }, [snake, direction]);
+  }, [snake, direction, gameStarted]);
 
   function changeDirection(event) {
     // Use WASD for movement
@@ -41,7 +43,7 @@ export default function SnakeGame() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    if (!snake || snake.length === 0) return;  // Early return if snake is empty
+    if (!snake || snake.length === 0) return; // Early return if snake is empty
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -87,7 +89,8 @@ export default function SnakeGame() {
       snakeY >= canvas.height ||
       collision(newHead, snake)
     ) {
-      setGameOver(true);  // Set game over state to true
+      setGameOver(true); // Set game over state to true
+      setGameStarted(false);  // Stop the game when it's over
       return;
     }
 
@@ -100,13 +103,12 @@ export default function SnakeGame() {
       <div class="outer">
         <div class="modal">
           <h1>Game Over!</h1>
-          <p className="">Your score: {score}</p>
-          <button onClick={onRestart} className="">Restart</button>
+          <p class="">Your score: {score}</p>
+          <button onClick={onRestart}>Restart</button>
         </div>
       </div>
     );
   };
-
 
   function restartGame() {
     setGameOver(false);
@@ -119,10 +121,36 @@ export default function SnakeGame() {
     setScore(0);
   }
 
+  // Start the game
+  function startGame() {
+    setGameStarted(true);
+    setGameOver(false);
+    setSnake([{ x: 9 * box, y: 9 * box }]);
+    setDirection("RIGHT");
+    setFood({
+      x: Math.floor(Math.random() * 20) * box,
+      y: Math.floor(Math.random() * 20) * box,
+    });
+    setScore(0);
+  }
+
   return (
     <div>
-      <canvas ref={canvasRef} width={800} height={800} />
+      <canvas ref={canvasRef} width={500} height={500} />
+      {!gameStarted && !gameOver && (
+        <div class="outer">
+        <div class="modal">
+          <button onClick={startGame}>Start Game</button>
+        </div>
+        </div>
+      )}
       {gameOver && <Modal score={score} onRestart={restartGame} />}
     </div>
   );
 }
+
+const buttonStyles = {
+  textAlign: "center",
+  marginTop: "20px",
+};
+
