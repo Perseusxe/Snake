@@ -1,21 +1,56 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.header {
+  text-align: center;
+  padding: 20px;
+  background-color: #333;
+  color: white;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 100px);
+}
+
+.footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #333;
+  color: white;
+}
+.outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal {
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  top: 250px;
+  background-color: white;
+  position: absolute;
+}
+.modal p {
+  font-size: 20px;
+}
+.modal button {
+  width: 200px;
+  height: 100px;
+  font-size: 20px;
+  border: 0px 
+}
+
+canvas {
+  background-color: black;
 }
